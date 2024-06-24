@@ -34,6 +34,11 @@ const routes = [
     name: 'userCenter',
     component: () => import('../views/UserCenter.vue')
   },
+  {
+    path: '/course',
+    name: 'course',
+    component: () => import('../views/CourseManage.vue')
+  },
 ]
 
 const router = createRouter({

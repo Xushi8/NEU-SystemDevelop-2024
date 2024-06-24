@@ -6,10 +6,10 @@ public class Course {
     private int courseId;
     private String courseName;
     private String companyName;
-    private String coverPath;
+    private String uuid;
+    private String path;
     private String description;
     private String courseOrder;
-    private String videoPath;
     private String author;
     private Timestamp createTime;
 
@@ -39,12 +39,20 @@ public class Course {
         this.companyName = companyName;
     }
 
-    public String getCoverPath() {
-        return coverPath;
+    public String getUuid() {
+        return uuid;
     }
 
-    public void setCoverPath(String coverPath) {
-        this.coverPath = coverPath;
+    public void setUuid(String uuid) {
+        this.uuid = uuid;
+    }
+
+    public String getPath() {
+        return path;
+    }
+
+    public void setPath(String path) {
+        this.path = path;
     }
 
     public String getDescription() {
@@ -61,14 +69,6 @@ public class Course {
 
     public void setCourseOrder(String courseOrder) {
         this.courseOrder = courseOrder;
-    }
-
-    public String getVideoPath() {
-        return videoPath;
-    }
-
-    public void setVideoPath(String videoPath) {
-        this.videoPath = videoPath;
     }
 
     public String getAuthor() {
