@@ -102,7 +102,6 @@
                     <!-- 一行中四个按钮，用来新增、删除修改、导出（暂时没有绑定方法） -->
                     <el-row style="text-align: left;">
                         <el-button type="primary" plain icon="Plus" style="margin-top: 5px" @click="addCourse">新增</el-button>
-                        <el-button type="success" plain icon="Edit" style="margin-top: 5px" @click="modifyCourse">修改</el-button>
                         <el-button type="danger" plain icon="Delete" style="margin-top: 5px" @click="deleteCourse">删除</el-button>
                         <el-button type="warning" plain icon="Download" style="margin-top: 5px" @click="exportCourse">导出</el-button>
                     </el-row>
@@ -113,7 +112,7 @@
                             @selection-change="handleSelectionChange">
                             <!-- 表单列 -->
                             <el-table-column type="selection" width="55"></el-table-column>
-                            <el-table-column prop="courseId" label="主键ID" width="50" header-align="center"
+                            <el-table-column prop="courseId" label="主键ID" width="100" header-align="center"
                                 align="center"></el-table-column>
                             <el-table-column prop="courseName" label="课程名称" width="150" header-align="center"
                                 align="center"></el-table-column>
@@ -245,6 +244,26 @@ export default {
             router.push('/userCenter');
         };
 
+        const addCourse = () => {
+            axios.get("http://localhost:8070/course/list")
+                .then(res => {
+                    // this.companyList = res.companies;
+                    // console.log("数据读取成功")
+                    if (res.data.isOk) console.log("数据读取成功")
+                })
+                .catch(error => {
+                    if (error) console.log("数据读取成功")
+                });
+        };
+
+        const deleteCourse = () => {
+
+        };
+
+        const exportCourse = () => {
+
+        };
+
         const back = () => {
             router.push('/login');
         };
@@ -261,30 +280,10 @@ export default {
             handleDelete,
             personalCenter,
             back,
+            addCourse,
+            deleteCourse,
+            exportCourse,
         };
-    },
-    methods: {
-        addCourse() {
-            alert('add course');
-            axios.get("http://localhost:8080/course/list")
-                .then(res => {
-                    // this.companyList = res.companies;
-                    // console.log("数据读取成功")
-                    if (res.data.isOk) console.log("数据读取成功")
-                })
-                .catch(error => {
-                    if (error) console.log("数据读取成功")
-                });
-        },
-        modifyCourse() {
-
-        },
-        deleteCourse() {
-
-        },
-        exportCourse() {
-
-        }
     }
 };
 </script>

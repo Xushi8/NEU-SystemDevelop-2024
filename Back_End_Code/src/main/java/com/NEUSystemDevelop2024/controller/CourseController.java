@@ -26,10 +26,10 @@ public class CourseController {
     @RequestMapping("/list")
     public Map list()
     {
-        List<Course> userList = courseBiz.getCourseList();
+        List<Course> courseList = courseBiz.getCourseList();
         Map map = new HashMap();
         map.put("isOk", true);
-        map.put("users", userList);
+        map.put("courses", courseList);
         map.put("msg","查询成功");
         return map;
     }
