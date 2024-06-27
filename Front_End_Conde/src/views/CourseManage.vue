@@ -101,12 +101,43 @@
 
                     <!-- 一行中四个按钮，用来新增、删除修改、导出（暂时没有绑定方法） -->
                     <el-row style="text-align: left;">
-                        <el-button type="primary" plain icon="Plus" style="margin-top: 5px" @click="addCourse">新增</el-button>
-                        <el-button type="danger" plain icon="Delete" style="margin-top: 5px" @click="deleteCourse">删除</el-button>
-                        <el-button type="warning" plain icon="Download" style="margin-top: 5px" @click="exportCourse">导出</el-button>
+                        <el-button type="primary" plain icon="Plus" style="margin-top: 5px"
+                            @click="dialogAddCourseVisible = true">新增</el-button>
+                        <el-button type="danger" plain icon="Delete" style="margin-top: 5px"
+                            @click="deleteCourse">删除</el-button>
+                        <el-button type="warning" plain icon="Download" style="margin-top: 5px"
+                            @click="exportCourse">导出</el-button>
                     </el-row>
 
-                    <!-- 用户菜单 -->
+                    <el-dialog v-model="dialogAddCourseVisible" title="添加课程管理" width="500">
+                        <el-form :model="form">
+                            <el-form-item label="课程名称" :label-width="formLabelWidth">
+                                <el-input v-model="courseForm.courseName" autocomplete="off" />
+                            </el-form-item>
+                            <el-form-item label="课程封面" :label-width="formLabelWidth">
+                                
+                            </el-form-item>
+                            <el-form-item label="课程简介" :label-width="formLabelWidth">
+                                <el-input v-model="courseForm.courseName" autocomplete="off" type="textarea" />
+                            </el-form-item>
+                            <el-form-item label="课程排序" :label-width="formLabelWidth">
+                                <el-input v-model="courseForm.courseName" autocomplete="off" type="textarea" />
+                            </el-form-item>
+                            <el-form-item label="课程作者" :label-width="formLabelWidth">
+                                <el-input v-model="courseForm.courseName" autocomplete="off" />
+                            </el-form-item>
+                        </el-form>
+                        <template #footer>
+                            <div class="dialog-footer">
+                                <el-button @click="dialogAddCourseVisible = false">Cancel</el-button>
+                                <el-button type="primary" @click="dialogAddCourseVisible = false">
+                                    Confirm
+                                </el-button>
+                            </div>
+                        </template>
+                    </el-dialog>
+
+                    <!-- 课程菜单 -->
                     <div class="custom-table" style="margin-top: 10px;">
                         <el-table ref="multipleTable" :data="tableData" tooltip-effect="dark" style="width: 100%"
                             @selection-change="handleSelectionChange">
@@ -149,13 +180,27 @@
 </template>
 
 <script>
-import { ref } from 'vue';
+import { reactive, ref } from 'vue';
 import { useRouter } from 'vue-router';
 import { Management, UserFilled } from "@element-plus/icons-vue";
 import axios from 'axios';
+import { ElMessage } from 'element-plus';
+
+
 export default {
     components: { Management, UserFilled },
     setup() {
+        const dialogAddCourseVisible = ref(false);
+        const courseForm = reactive({
+            courseName: '',
+            region: '',
+            date1: '',
+            date2: '',
+            delivery: false,
+            type: [],
+            resource: '',
+            desc: '',
+        })
         // 用来存放数据的表格
         const tableData = ref([
             {
@@ -283,6 +328,8 @@ export default {
             addCourse,
             deleteCourse,
             exportCourse,
+            dialogAddCourseVisible,
+            courseForm,
         };
     }
 };
