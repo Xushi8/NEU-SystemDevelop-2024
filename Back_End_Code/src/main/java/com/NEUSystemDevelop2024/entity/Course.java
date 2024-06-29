@@ -6,12 +6,13 @@ public class Course {
     private int courseId;
     private String courseName;
     private String companyName;
-    private String uuid;
-    private String path;
     private String description;
     private String courseOrder;
     private String author;
     private Timestamp createTime;
+    private Timestamp modifyTime;
+    private String image; // base64
+    private String video; // base64
 
     Course() {}
 
@@ -37,22 +38,6 @@ public class Course {
 
     public void setCompanyName(String companyName) {
         this.companyName = companyName;
-    }
-
-    public String getUuid() {
-        return uuid;
-    }
-
-    public void setUuid(String uuid) {
-        this.uuid = uuid;
-    }
-
-    public String getPath() {
-        return path;
-    }
-
-    public void setPath(String path) {
-        this.path = path;
     }
 
     public String getDescription() {
@@ -85,5 +70,29 @@ public class Course {
 
     public void setCreateTime(Timestamp createTime) {
         this.createTime = createTime;
+    }
+
+    public Timestamp getModifyTime() {
+        return modifyTime;
+    }
+
+    public void setModifyTime(Timestamp modifyTime) {
+        this.modifyTime = modifyTime;
+    }
+
+    public String getImage() {
+        return image;
+    }
+
+    public void setImage(String image) {
+        this.image = image;
+    }
+
+    public String getVideo() {
+        return video;
+    }
+
+    public void setVideo(String video) {
+        this.video = video;
     }
 }

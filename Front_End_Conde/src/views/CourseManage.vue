@@ -114,8 +114,12 @@
                             <el-form-item label="课程名称" :label-width="formLabelWidth">
                                 <el-input v-model="courseForm.courseName" autocomplete="off" />
                             </el-form-item>
-                            <el-form-item label="课程封面" :label-width="formLabelWidth">
-                                
+                            <el-form-item label="上传图片" prop="imageUrl">
+                                <input type="file" @change="handleImageChange" ref="imageInput" />
+                                <img v-if="previewImageUrl" :src="previewImageUrl" class="avatar"
+                                    style="width: 100px; height: 100px; margin-top: 10px;">
+                                <i v-else class="el-icon-plus avatar-uploader-icon"></i>
+                                <button type="button" @click="cancelImageUpload">取消上传</button>
                             </el-form-item>
                             <el-form-item label="课程简介" :label-width="formLabelWidth">
                                 <el-input v-model="courseForm.courseName" autocomplete="off" type="textarea" />
@@ -148,6 +152,8 @@
                             <el-table-column prop="courseName" label="课程名称" width="150" header-align="center"
                                 align="center"></el-table-column>
                             <el-table-column prop="description" label="课程简介" width="300" header-align="center"
+                                align="center"></el-table-column>
+                            <el-table-column prop="courseOrder" label="课程排序" width="100" header-align="center"
                                 align="center"></el-table-column>
                             <el-table-column prop="companyName" label="所属公司" width="150" header-align="center"
                                 align="center"></el-table-column>
@@ -184,7 +190,7 @@ import { reactive, ref } from 'vue';
 import { useRouter } from 'vue-router';
 import { Management, UserFilled } from "@element-plus/icons-vue";
 import axios from 'axios';
-import { ElMessage } from 'element-plus';
+// import { ElMessage } from 'element-plus';
 
 
 export default {
@@ -192,38 +198,40 @@ export default {
     setup() {
         const dialogAddCourseVisible = ref(false);
         const courseForm = reactive({
+            courseId: '',
             courseName: '',
-            region: '',
-            date1: '',
-            date2: '',
-            delivery: false,
-            type: [],
-            resource: '',
-            desc: '',
+            companyName: '',
+            description: '',
+            courseOrder: '',
+            author: '',
+            createTime: '',
         })
         // 用来存放数据的表格
         const tableData = ref([
             {
                 courseId: '1',
                 courseName: 'vue入门课',
-                description: '从0开始学习vue3',
                 companyName: '百度',
+                description: '从0开始学习vue3',
+                courseOrder: '',
                 author: '李彦宏',
                 createTime: '2024-04-01'
             },
             {
                 courseId: '2',
                 courseName: 'java入门课',
-                description: 'java8',
                 companyName: '百度',
+                description: 'java8',
+                courseOrder: '',
                 author: '李彦宏',
                 createTime: '2024-04-02'
             },
             {
                 courseId: '3',
                 courseName: 'cpp入门课',
-                description: '从0开始学习cpp11',
                 companyName: '百度',
+                description: '从0开始学习cpp11',
+                courseOrder: '',
                 author: '李彦宏',
                 createTime: '2024-04-03'
             }
@@ -309,6 +317,35 @@ export default {
 
         };
 
+
+        // image
+        const selectedImage = ref(null);
+        const previewImageUrl = ref('');
+        const selectedRows = ref([]);
+
+        const imageUrl = ref('');
+
+        const handleImageChange = (event) => {
+            selectedImage.value = event.target.files[0];
+            if (!selectedImage.value) return;
+
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                previewImageUrl.value = e.target.result; // 将读取的图片数据赋值给预览 URL
+            };
+            reader.readAsDataURL(selectedImage.value);
+        };
+
+        const cancelImageUpload = () => {
+            selectedImage.value = null; // 清空已选择的文件
+            previewImageUrl.value = ''; // 清空预览图片 URL
+            imageUrl.value = '';
+            const imageInput = document.querySelector('input[type="file"]');
+            if (imageInput) {
+                imageInput.value = '';
+            }
+        };
+
         const back = () => {
             router.push('/login');
         };
@@ -330,6 +367,14 @@ export default {
             exportCourse,
             dialogAddCourseVisible,
             courseForm,
+            selectedRows,
+            // image
+            selectedImage,
+            previewImageUrl,
+            imageUrl,
+            handleImageChange,
+            cancelImageUpload,
+            // video
         };
     }
 };

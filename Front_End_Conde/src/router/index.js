@@ -40,6 +40,11 @@ const routes = [
     name: 'course',
     component: () => import('../views/CourseManage.vue')
   },
+  {
+    path: '/news',
+    name: 'news',
+    component: () => import('../views/NewsManage.vue')
+  },
 ]
 
 const router = createRouter({
