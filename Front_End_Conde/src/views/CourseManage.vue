@@ -127,6 +127,13 @@
                             <el-form-item label="课程排序" :label-width="formLabelWidth">
                                 <el-input v-model="courseForm.courseName" autocomplete="off" type="textarea" />
                             </el-form-item>
+                            <el-form-item label="上传视频" prop="videoUrl">
+                                <input type="file" @change="handleVideoChange" ref="imageInput" />
+                                <img v-if="previewVideoUrl" :src="previewVideoUrl" class="avatar"
+                                    style="width: 100px; height: 100px; margin-top: 10px;">
+                                <i v-else class="el-icon-plus avatar-uploader-icon"></i>
+                                <button type="button" @click="cancelVideoUpload">取消上传</button>
+                            </el-form-item>
                             <el-form-item label="课程作者" :label-width="formLabelWidth">
                                 <el-input v-model="courseForm.courseName" autocomplete="off" />
                             </el-form-item>
@@ -346,6 +353,33 @@ export default {
             }
         };
 
+        // video
+        const selectedVideo = ref(null);
+        const previewVideoUrl = ref('');
+
+        const videoUrl = ref('');
+
+        const handleVideoChange = (event) => {
+            selectedVideo.value = event.target.files[0];
+            if (!selectedVideo.value) return;
+
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                previewVideoUrl.value = e.target.result; // 将读取的图片数据赋值给预览 URL
+            };
+            reader.readAsDataURL(selectedVideo.value);
+        };
+
+        const cancelVideoUpload = () => {
+            selectedVideo.value = null; // 清空已选择的文件
+            previewVideoUrl.value = ''; // 清空预览图片 URL
+            videoUrl.value = '';
+            const videoInput = document.querySelector('input[type="file"]');
+            if (videoInput) {
+                videoInput.value = '';
+            }
+        };
+
         const back = () => {
             router.push('/login');
         };
@@ -375,6 +409,11 @@ export default {
             handleImageChange,
             cancelImageUpload,
             // video
+            selectedVideo,
+            previewVideoUrl,
+            videoUrl,
+            handleVideoChange,
+            cancelVideoUpload,
         };
     }
 };
