@@ -11,8 +11,8 @@ public class Course {
     private String author;
     private Timestamp createTime;
     private Timestamp modifyTime;
-    private String image; // base64
-    private String video; // base64
+    private String imageUrl; // base64
+    private String videoUrl; // base64
 
     Course() {}
 
@@ -80,19 +80,19 @@ public class Course {
         this.modifyTime = modifyTime;
     }
 
-    public String getImage() {
-        return image;
+    public String getImageUrl() {
+        return imageUrl;
     }
 
-    public void setImage(String image) {
-        this.image = image;
+    public void setImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
     }
 
-    public String getVideo() {
-        return video;
+    public String getVideoUrl() {
+        return videoUrl;
     }
 
-    public void setVideo(String video) {
-        this.video = video;
+    public void setVideoUrl(String videoUrl) {
+        this.videoUrl = videoUrl;
     }
 }

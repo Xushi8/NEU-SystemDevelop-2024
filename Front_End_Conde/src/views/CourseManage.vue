@@ -109,41 +109,42 @@
                             @click="exportCourse">导出</el-button>
                     </el-row>
 
-                    <el-dialog v-model="dialogAddCourseVisible" title="添加课程管理" width="500">
-                        <el-form :model="form">
-                            <el-form-item label="课程名称" :label-width="formLabelWidth">
+                    <el-dialog v-model="dialogAddCourseVisible" title="添加课程" width="700">
+                        <el-form :ref="form" :model="form" :rules="rules">
+                            <el-form-item label="课程名称" prop="courseName" :label-width="formLabelWidth">
                                 <el-input v-model="courseForm.courseName" autocomplete="off" />
                             </el-form-item>
-                            <el-form-item label="上传图片" prop="imageUrl">
+                            <el-form-item label="课程封面" prop="imageUrl">
                                 <input type="file" @change="handleImageChange" ref="imageInput" />
                                 <img v-if="previewImageUrl" :src="previewImageUrl" class="avatar"
                                     style="width: 100px; height: 100px; margin-top: 10px;">
                                 <i v-else class="el-icon-plus avatar-uploader-icon"></i>
                                 <button type="button" @click="cancelImageUpload">取消上传</button>
                             </el-form-item>
-                            <el-form-item label="课程简介" :label-width="formLabelWidth">
-                                <el-input v-model="courseForm.courseName" autocomplete="off" type="textarea" />
+                            <el-form-item label="课程简介" prop="description" :label-width="formLabelWidth">
+                                <el-input v-model="courseForm.description" autocomplete="off" type="textarea" />
                             </el-form-item>
-                            <el-form-item label="课程排序" :label-width="formLabelWidth">
-                                <el-input v-model="courseForm.courseName" autocomplete="off" type="textarea" />
+                            <el-form-item label="课程排序" prop="courseOrder" :label-width="formLabelWidth">
+                                <el-input v-model="courseForm.courseOrder" autocomplete="off" type="textarea" />
                             </el-form-item>
-                            <el-form-item label="上传视频" prop="videoUrl">
-                                <input type="file" @change="handleVideoChange" ref="imageInput" />
+                            <el-form-item label="课程视频" prop="videoUrl">
+                                <input type="file" @change="handleVideoChange" ref="videoInput" />
                                 <img v-if="previewVideoUrl" :src="previewVideoUrl" class="avatar"
                                     style="width: 100px; height: 100px; margin-top: 10px;">
                                 <i v-else class="el-icon-plus avatar-uploader-icon"></i>
                                 <button type="button" @click="cancelVideoUpload">取消上传</button>
                             </el-form-item>
-                            <el-form-item label="课程作者" :label-width="formLabelWidth">
-                                <el-input v-model="courseForm.courseName" autocomplete="off" />
+                            <el-form-item label="课程作者" prop="author" :label-width="formLabelWidth">
+                                <el-input v-model="courseForm.author" autocomplete="off" />
                             </el-form-item>
                         </el-form>
                         <template #footer>
                             <div class="dialog-footer">
-                                <el-button @click="dialogAddCourseVisible = false">Cancel</el-button>
-                                <el-button type="primary" @click="dialogAddCourseVisible = false">
-                                    Confirm
-                                </el-button>
+                                <el-button @click="clearForm()">清除</el-button>
+                                <el-button @click="closeDialog()">取消</el-button>
+                                <el-button type="primary" @click="addCourse">确认添加</el-button>
+                                <!-- <el-button type="primary" v-if="isChange === 0" @click="addCourse">确认添加</el-button> -->
+                                <!-- <el-button type="primary" v-else @click="editCourse">确认修改</el-button> -->
                             </div>
                         </template>
                     </el-dialog>
@@ -212,7 +213,81 @@ export default {
             courseOrder: '',
             author: '',
             createTime: '',
-        })
+            modifyTime: '',
+            imageUrl: '',
+            videoUrl: '',
+        });
+
+        const rules = {
+            courseName: [
+                {
+                    required: true,
+                    message: '请输入课程名称',
+                    trigger: ['blur', 'change']
+                },
+                {
+                    whitespace: true,
+                    message: '课程名不能为空',
+                    trigger: 'blur'
+                }
+            ],
+            imageUrl: [
+                {
+                    required: true,
+                    message: '请上传封面图片',
+                    trigger: ['blur', 'change']
+                }
+            ],
+            description: [
+                {
+                    required: true,
+                    message: '请输入课程简介',
+                    trigger: ['blur', 'change']
+                },
+                {
+                    whitespace: true,
+                    message: '课程简介不能为空',
+                    trigger: 'blur'
+                }
+            ],
+            courseOrder: [
+                {
+                    required: true,
+                    message: '请输入课程排序',
+                    trigger: ['blur', 'change']
+                },
+                {
+                    whitespace: true,
+                    message: '课程排序不能为空',
+                    trigger: 'blur'
+                }
+            ],
+            videoUrl: [
+                {
+                    required: true,
+                    message: '请输入视频',
+                    trigger: ['blur', 'change']
+                },
+                {
+                    whitespace: true,
+                    message: '视频不能为空',
+                    trigger: 'blur'
+                }
+            ],
+            author: [
+                {
+                    required: true,
+                    message: '请输入作者',
+                    trigger: ['blur', 'change']
+                },
+                {
+                    whitespace: true,
+                    message: '作者不能为空',
+                    trigger: 'blur'
+                }
+            ]
+        };
+
         // 用来存放数据的表格
         const tableData = ref([
             {
@@ -243,6 +318,63 @@ export default {
                 createTime: '2024-04-03'
             }
         ]);
+
+
+        const clearForm = () => {
+            cancelImageUpload();
+            cancelVideoUpload();
+            courseForm.courseName = '';
+            courseForm.description = '';
+            courseForm.courseOrder = '';
+            courseForm.author = '';
+        };
+
+        const addCourse = () => {
+            // if (!courseForm.courseName || !courseForm.description || !courseForm.courseOrder || !courseForm.author || !courseFrom.imageUrl.value() || !courseForm.videoUrl.value()) {
+            //     errorMessage.value = '请输入完整后添加';
+            //     errorDialogVisible.value = true;
+            //     return; // 如果有空字段，直接返回，不执行后续的添加操作
+            // }
+
+            // const formData = new FormData();
+            // formData.append('file', selectedFile.value);
+
+            // imageUrl.value = previewImageUrl.value;
+            // const requestData = {
+            //     title: title.value,
+            //     imageUrl: imageUrl.value,
+            //     content: content.value,
+            //     author: author.value,
+            //     summary: summary.value,
+            //     tenant: tenant.value,
+            // };
+
+            // // 发送 POST 请求
+            // axios.post('http://localhost:9000/news/add', requestData)
+            //     .then(response => {
+            //         console.log('新增新闻成功', response.data);
+
+            //         refreshNewsList();
+
+
+            //         // 假设后端返回的新闻数据包含在 response.data 中
+            //         // 将新闻数据添加到 tableData 中
+            //         // tableData.value.push(response.data);
+
+            //         // 关闭对话框等其他操作可以在这里处理
+            //         dialogVisible.value = false;
+            //         // 显示成功提示框等
+            //         successMessage.value = '新增新闻成功';
+            //         successDialogVisible.value = true;
+            //     })
+            //     .catch(error => {
+            //         console.error('新增新闻失败', error);
+
+            //         // 显示错误提示框等
+            //         errorMessage.value = '新增新闻失败，请重试';
+            //         errorDialogVisible.value = true;
+            //     });
+        };
 
         const pickerOptions = ref({
             disabledDate(time) {
@@ -304,17 +436,6 @@ export default {
             router.push('/userCenter');
         };
 
-        const addCourse = () => {
-            axios.get("http://localhost:8070/course/list")
-                .then(res => {
-                    // this.companyList = res.companies;
-                    // console.log("数据读取成功")
-                    if (res.data.isOk) console.log("数据读取成功")
-                })
-                .catch(error => {
-                    if (error) console.log("数据读取成功")
-                });
-        };
 
         const deleteCourse = () => {
 
@@ -344,10 +465,10 @@ export default {
         };
 
         const cancelImageUpload = () => {
-            selectedImage.value = null; // 清空已选择的文件
+            selectedImage.value = null; // 清空已选择的图片
             previewImageUrl.value = ''; // 清空预览图片 URL
             imageUrl.value = '';
-            const imageInput = document.querySelector('input[type="file"]');
+            const imageInput = document.querySelectorAll('input[type="file"]')[0];
             if (imageInput) {
                 imageInput.value = '';
             }
@@ -371,10 +492,10 @@ export default {
         };
 
         const cancelVideoUpload = () => {
-            selectedVideo.value = null; // 清空已选择的文件
-            previewVideoUrl.value = ''; // 清空预览图片 URL
+            selectedVideo.value = null; // 清空已选择的视频
+            previewVideoUrl.value = ''; // 清空预览视频 URL
             videoUrl.value = '';
-            const videoInput = document.querySelector('input[type="file"]');
+            const videoInput = document.querySelectorAll('input[type="file"]')[1];
             if (videoInput) {
                 videoInput.value = '';
             }
@@ -401,6 +522,8 @@ export default {
             exportCourse,
             dialogAddCourseVisible,
             courseForm,
+            clearForm,
+            rules,
             selectedRows,
             // image
             selectedImage,
