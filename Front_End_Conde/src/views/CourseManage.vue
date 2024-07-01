@@ -96,7 +96,8 @@
                         </el-date-picker>
                         <!-- 查询和重置按钮 -->
                         <el-button type="primary" style="margin-left: 15px;" icon="Search">搜索</el-button>
-                        <el-button plain style="margin-left: 15px;" icon="Refresh">重置</el-button>
+                        <el-button plain style="margin-left: 15px;" icon="Refresh"
+                            @click="refreshCoursesList">重置</el-button>
                     </div>
 
                     <!-- 一行中四个按钮，用来新增、删除修改、导出（暂时没有绑定方法） -->
@@ -289,35 +290,7 @@ export default {
         };
 
         // 用来存放数据的表格
-        const tableData = ref([
-            {
-                courseId: '1',
-                courseName: 'vue入门课',
-                companyName: '百度',
-                description: '从0开始学习vue3',
-                courseOrder: '',
-                author: '李彦宏',
-                createTime: '2024-04-01'
-            },
-            {
-                courseId: '2',
-                courseName: 'java入门课',
-                companyName: '百度',
-                description: 'java8',
-                courseOrder: '',
-                author: '李彦宏',
-                createTime: '2024-04-02'
-            },
-            {
-                courseId: '3',
-                courseName: 'cpp入门课',
-                companyName: '百度',
-                description: '从0开始学习cpp11',
-                courseOrder: '',
-                author: '李彦宏',
-                createTime: '2024-04-03'
-            }
-        ]);
+        const tableData = ref([]);
 
 
         const clearForm = () => {
@@ -330,50 +303,99 @@ export default {
         };
 
         const addCourse = () => {
-            // if (!courseForm.courseName || !courseForm.description || !courseForm.courseOrder || !courseForm.author || !courseFrom.imageUrl.value() || !courseForm.videoUrl.value()) {
-            //     errorMessage.value = '请输入完整后添加';
-            //     errorDialogVisible.value = true;
-            //     return; // 如果有空字段，直接返回，不执行后续的添加操作
-            // }
+            previewImageUrl.value;
+            previewVideoUrl.value;
+            if (!courseForm.courseName || !courseForm.description || !courseForm.courseOrder || !courseForm.author || !previewImageUrl.value || !previewVideoUrl.value) {
+                // alert(courseForm.courseName);
+                // alert(courseForm.companyName);
+                // alert(courseForm.description);
+                // alert(courseForm.courseOrder);
+                // alert(courseForm.author);
+                // alert(previewImageUrl.value);
+                // alert(previewVideoUrl.value);
 
-            // const formData = new FormData();
-            // formData.append('file', selectedFile.value);
+                // errorMessage.value = '请输入完整后添加';
+                // errorDialogVisible.value = true;
+                return; // 如果有空字段，直接返回，不执行后续的添加操作
+            }
 
-            // imageUrl.value = previewImageUrl.value;
-            // const requestData = {
-            //     title: title.value,
-            //     imageUrl: imageUrl.value,
-            //     content: content.value,
-            //     author: author.value,
-            //     summary: summary.value,
-            //     tenant: tenant.value,
-            // };
+            // alert(courseForm.courseId);
+            // alert(courseForm.courseName);
+            // alert(courseForm.companyName);
+            // alert(courseForm.description);
+            // alert(courseForm.courseOrder);
+            // alert(courseForm.author);
+            // alert(previewImageUrl.value);
+            // alert(previewVideoUrl.value);
 
-            // // 发送 POST 请求
-            // axios.post('http://localhost:9000/news/add', requestData)
-            //     .then(response => {
-            //         console.log('新增新闻成功', response.data);
+            const requestData = {
+                courseId: 1,
+                courseName: courseForm.courseName,
+                companyName: '',
+                description: courseForm.description,
+                courseOrder: courseForm.courseOrder,
+                author: courseForm.author,
+                createTime: '',
+                modifyTime: '',
+                imageUrl: previewImageUrl.value,
+                videoUrl: previewVideoUrl.value,
+            };
 
-            //         refreshNewsList();
+            // let fd = new FormData;
+            // fd.append('courseId', '1');
+            // fd.append('courseName', courseForm.courseName);
+            // fd.append('companyName', '');
+            // fd.append('description', courseForm.description);
+            // fd.append('courseOrder', courseForm.courseOrder);
+            // fd.append('author', courseForm.author);
+            // fd.append('createTime', '');
+            // fd.append('modifyTime', '');
+            // fd.append('imageUrl', previewImageUrl.value);
+            // fd.append('videoUrl', previewImageUrl.value);
+
+            axios.post('http://localhost:8070/course/add', requestData)
+                .then(response => {
+                    console.log('新增课程成功', response.data);
+                    // alert('新增课程成功');
+
+                    refreshCoursesList();
 
 
-            //         // 假设后端返回的新闻数据包含在 response.data 中
-            //         // 将新闻数据添加到 tableData 中
-            //         // tableData.value.push(response.data);
+                    // 假设后端返回的新闻数据包含在 response.data 中
+                    // 将新闻数据添加到 tableData 中
+                    // tableData.value.push(response.data);
 
-            //         // 关闭对话框等其他操作可以在这里处理
-            //         dialogVisible.value = false;
-            //         // 显示成功提示框等
-            //         successMessage.value = '新增新闻成功';
-            //         successDialogVisible.value = true;
-            //     })
-            //     .catch(error => {
-            //         console.error('新增新闻失败', error);
+                    // 关闭对话框等其他操作可以在这里处理
+                    dialogAddCourseVisible.value = false;
+                    // alert('新增课程成功');
+                    // 显示成功提示框等
+                    // successMessage.value = '新增课程成功';
+                    // successDialogVisible.value = true;
+                })
+                .catch(error => {
+                    console.error('新增课程失败', error);
+                    // alert('新增课程失败');
 
-            //         // 显示错误提示框等
-            //         errorMessage.value = '新增新闻失败，请重试';
-            //         errorDialogVisible.value = true;
-            //     });
+                    // 显示错误提示框等
+                    // errorMessage.value = '新增课程失败，请稍后重试';
+                    // errorDialogVisible.value = true;
+                });
+        };
+
+        // 课程列表
+        const refreshCoursesList = () => {
+            // alert("refresh begin");
+            axios.get('http://localhost:8070/course/list')
+                .then(response => {
+                    // alert('refresh success');
+                    tableData.value = response.data.courses; // 假设后端返回的数据是一个包含新闻信息的数组
+                    // updatePagedData(tableData.value); // 更新分页数据的函数，假设已定义
+                })
+                .catch(error => {
+                    // alert('refresh error');
+                    console.error('获取课程列表失败', error);
+                    // 可以在这里处理获取新闻列表失败的情况，比如显示错误信息给用户
+                });
         };
 
         const pickerOptions = ref({
@@ -537,6 +559,7 @@ export default {
             videoUrl,
             handleVideoChange,
             cancelVideoUpload,
+            refreshCoursesList,
         };
     }
 };

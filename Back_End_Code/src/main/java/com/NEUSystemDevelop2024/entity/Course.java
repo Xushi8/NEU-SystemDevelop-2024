@@ -3,7 +3,7 @@ package com.NEUSystemDevelop2024.entity;
 import java.sql.Timestamp;
 
 public class Course {
-    private int courseId;
+    private Integer courseId;
     private String courseName;
     private String companyName;
     private String description;
@@ -14,13 +14,13 @@ public class Course {
     private String imageUrl; // base64
     private String videoUrl; // base64
 
-    Course() {}
+    public Course() {}
 
-    public int getCourseId() {
+    public Integer getCourseId() {
         return courseId;
     }
 
-    public void setCourseId(int courseId) {
+    public void setCourseId(Integer courseId) {
         this.courseId = courseId;
     }
 
@@ -94,5 +94,21 @@ public class Course {
 
     public void setVideoUrl(String videoUrl) {
         this.videoUrl = videoUrl;
+    }
+
+    @Override
+    public String toString() {
+        return "Course{" +
+                "courseId=" + courseId +
+                ", courseName='" + courseName + '\'' +
+                ", companyName='" + companyName + '\'' +
+                ", description='" + description + '\'' +
+                ", courseOrder='" + courseOrder + '\'' +
+                ", author='" + author + '\'' +
+                ", createTime=" + createTime +
+                ", modifyTime=" + modifyTime +
+                ", imageUrl='" + imageUrl + '\'' +
+                ", videoUrl='" + videoUrl + '\'' +
+                '}';
     }
 }

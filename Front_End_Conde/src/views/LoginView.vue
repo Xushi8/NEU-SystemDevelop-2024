@@ -22,6 +22,7 @@
       <div class="button-container">
         <el-button style="width:100%; margin-top: 10px;" @click="register">注册</el-button>
         <el-button style="width:100%; margin-top: 10px;" @click="course_test">课程测试</el-button>
+        <el-button style="width:100%; margin-top: 10px;" @click="news_test">新闻测试</el-button>
       </div>
     </el-form>
   </div>
@@ -96,6 +97,9 @@ export default defineComponent({
     },
     course_test() {
       this.$router.push('/course');
+    },
+    news_test() {
+      this.$router.push('/news');
     },
     refreshCaptcha() {
       // Replace with actual logic to refresh captcha
